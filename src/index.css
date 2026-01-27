@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* GeminiTalk AI Design System
+   A warm, encouraging, and modern language learning experience
+*/
+
+@layer base {
+  :root {
+    /* Core brand colors - Warm Coral & Deep Navy */
+    --background: 40 33% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Warm coral - encouraging and energetic */
+    --primary: 16 85% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Soft cream secondary */
+    --secondary: 40 30% 94%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 40 20% 92%;
+    --muted-foreground: 222 20% 45%;
+
+    /* Teal accent for highlights */
+    --accent: 174 62% 47%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 16 85% 60%;
+
+    --radius: 1rem;
+
+    /* Custom semantic tokens */
+    --success: 142 70% 45%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --info: 210 100% 50%;
+    --info-foreground: 0 0% 100%;
+
+    /* Learning status colors */
+    --status-perfect: 142 70% 45%;
+    --status-good: 174 62% 47%;
+    --status-needs-work: 38 92% 50%;
+    --status-error: 0 84% 60%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(16 85% 60%), hsl(30 85% 55%), hsl(174 62% 47%));
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%), hsl(40 30% 98%));
+    --gradient-glass: linear-gradient(135deg, hsla(0, 0%, 100%, 0.9), hsla(0, 0%, 100%, 0.7));
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px hsla(222, 47%, 11%, 0.05);
+    --shadow-md: 0 4px 12px hsla(222, 47%, 11%, 0.08);
+    --shadow-lg: 0 12px 40px hsla(222, 47%, 11%, 0.12);
+    --shadow-glow: 0 0 40px hsla(16, 85%, 60%, 0.3);
+    --shadow-accent-glow: 0 0 40px hsla(174, 62%, 47%, 0.3);
+
+    --sidebar-background: 40 33% 98%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 16 85% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 40 30% 94%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 40 20% 88%;
+    --sidebar-ring: 16 85% 60%;
+  }
+
+  .dark {
+    --background: 222 47% 8%;
+    --foreground: 40 30% 96%;
+
+    --card: 222 47% 11%;
+    --card-foreground: 40 30% 96%;
+
+    --popover: 222 47% 11%;
+    --popover-foreground: 40 30% 96%;
+
+    --primary: 16 85% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 222 40% 18%;
+    --secondary-foreground: 40 30% 96%;
+
+    --muted: 222 40% 18%;
+    --muted-foreground: 40 20% 60%;
+
+    --accent: 174 62% 47%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 222 40% 20%;
+    --input: 222 40% 20%;
+    --ring: 16 85% 60%;
+
+    --sidebar-background: 222 47% 8%;
+    --sidebar-foreground: 40 30% 96%;
+    --sidebar-primary: 16 85% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 40% 18%;
+    --sidebar-accent-foreground: 40 30% 96%;
+    --sidebar-border: 222 40% 20%;
+    --sidebar-ring: 16 85% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-bold tracking-tight;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-orange-400 to-accent;
+  }
+
+  .text-gradient-reverse {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent via-teal-400 to-primary;
+  }
+
+  .glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  .glow-accent {
+    box-shadow: var(--shadow-accent-glow);
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+}

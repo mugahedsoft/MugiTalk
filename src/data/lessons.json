@@ -1,0 +1,459 @@
+{
+    "lessons": [
+        {
+            "id": "a1-daily-greetings",
+            "title": "Daily Greetings & Introductions",
+            "description": "Learn how to greet people and introduce yourself in English",
+            "level": "A1",
+            "category": "daily-life",
+            "estimatedMinutes": 15,
+            "order": 1,
+            "isLocked": false,
+            "sentences": [
+                {
+                    "id": "s1",
+                    "text": "Hello! How are you?",
+                    "translation": "مرحباً! كيف حالك؟",
+                    "phonetic": "/həˈloʊ haʊ ɑːr juː/",
+                    "explanation": "A common friendly greeting used in English",
+                    "grammarPoints": [
+                        "Present tense 'to be'",
+                        "Question formation"
+                    ],
+                    "difficulty": 1
+                },
+                {
+                    "id": "s2",
+                    "text": "I'm fine, thank you. And you?",
+                    "translation": "أنا بخير، شكراً. وأنت؟",
+                    "phonetic": "/aɪm faɪn θæŋk juː ænd juː/",
+                    "explanation": "Standard polite response to 'How are you?'",
+                    "grammarPoints": [
+                        "Contraction I'm",
+                        "Polite expressions"
+                    ],
+                    "difficulty": 1
+                },
+                {
+                    "id": "s3",
+                    "text": "My name is Sarah.",
+                    "translation": "اسمي سارة.",
+                    "phonetic": "/maɪ neɪm ɪz ˈsærə/",
+                    "explanation": "How to introduce yourself",
+                    "grammarPoints": [
+                        "Possessive pronoun 'my'",
+                        "Verb 'to be'"
+                    ],
+                    "difficulty": 1
+                },
+                {
+                    "id": "s4",
+                    "text": "Nice to meet you!",
+                    "translation": "تشرفت بمعرفتك!",
+                    "phonetic": "/naɪs tuː miːt juː/",
+                    "explanation": "A polite phrase when meeting someone for the first time",
+                    "grammarPoints": [
+                        "Infinitive with 'to'"
+                    ],
+                    "difficulty": 1
+                },
+                {
+                    "id": "s5",
+                    "text": "Where are you from?",
+                    "translation": "من أين أنت؟",
+                    "phonetic": "/weər ɑːr juː frɒm/",
+                    "explanation": "Asking about someone's origin or nationality",
+                    "grammarPoints": [
+                        "Question word 'where'",
+                        "Preposition 'from'"
+                    ],
+                    "difficulty": 1
+                }
+            ],
+            "vocabularyWords": [
+                {
+                    "id": "v1",
+                    "word": "hello",
+                    "translation": "مرحباً",
+                    "partOfSpeech": "noun",
+                    "exampleSentence": "Hello, how can I help you?",
+                    "exampleTranslation": "مرحباً، كيف يمكنني مساعدتك؟"
+                },
+                {
+                    "id": "v2",
+                    "word": "name",
+                    "translation": "اسم",
+                    "partOfSpeech": "noun",
+                    "exampleSentence": "What is your name?",
+                    "exampleTranslation": "ما اسمك؟"
+                },
+                {
+                    "id": "v3",
+                    "word": "meet",
+                    "translation": "يلتقي",
+                    "partOfSpeech": "verb",
+                    "exampleSentence": "Let's meet at the coffee shop.",
+                    "exampleTranslation": "دعنا نلتقي في المقهى."
+                }
+            ]
+        },
+        {
+            "id": "a1-numbers-time",
+            "title": "Numbers and Telling Time",
+            "description": "Master basic numbers and how to tell time in English",
+            "level": "A1",
+            "category": "daily-life",
+            "estimatedMinutes": 12,
+            "order": 2,
+            "isLocked": false,
+            "sentences": [
+                {
+                    "id": "s1",
+                    "text": "What time is it?",
+                    "translation": "كم الساعة؟",
+                    "phonetic": "/wɒt taɪm ɪz ɪt/",
+                    "explanation": "Asking for the current time",
+                    "grammarPoints": [
+                        "Question formation",
+                        "Pronoun 'it' for time"
+                    ],
+                    "difficulty": 1
+                },
+                {
+                    "id": "s2",
+                    "text": "It's nine o'clock.",
+                    "translation": "الساعة التاسعة.",
+                    "phonetic": "/ɪts naɪn əˈklɒk/",
+                    "explanation": "Telling time on the hour",
+                    "grammarPoints": [
+                        "Contraction it's",
+                        "Time expressions"
+                    ],
+                    "difficulty": 1
+                },
+                {
+                    "id": "s3",
+                    "text": "I have three books.",
+                    "translation": "لدي ثلاثة كتب.",
+                    "phonetic": "/aɪ hæv θriː bʊks/",
+                    "explanation": "Using numbers with plural nouns",
+                    "grammarPoints": [
+                        "Numbers",
+                        "Plural nouns"
+                    ],
+                    "difficulty": 1
+                },
+                {
+                    "id": "s4",
+                    "text": "The meeting is at two thirty.",
+                    "translation": "الاجتماع في الساعة الثانية والنصف.",
+                    "phonetic": "/ðə ˈmiːtɪŋ ɪz ættuː ˈθɜːti/",
+                    "explanation": "Telling time with minutes",
+                    "grammarPoints": [
+                        "Time expressions",
+                        "Preposition 'at' for time"
+                    ],
+                    "difficulty": 2
+                }
+            ],
+            "vocabularyWords": [
+                {
+                    "id": "v1",
+                    "word": "time",
+                    "translation": "وقت",
+                    "partOfSpeech": "noun",
+                    "exampleSentence": "Do you have time for coffee?",
+                    "exampleTranslation": "هل لديك وقت للقهوة؟"
+                },
+                {
+                    "id": "v2",
+                    "word": "number",
+                    "translation": "رقم",
+                    "partOfSpeech": "noun",
+                    "exampleSentence": "What's your phone number?",
+                    "exampleTranslation": "ما رقم هاتفك؟"
+                }
+            ]
+        },
+        {
+            "id": "a2-restaurant-ordering",
+            "title": "Restaurant & Food Ordering",
+            "description": "Learn how to order food at restaurants and cafes",
+            "level": "A2",
+            "category": "food",
+            "estimatedMinutes": 18,
+            "order": 3,
+            "isLocked": false,
+            "sentences": [
+                {
+                    "id": "s1",
+                    "text": "I'd like to order a coffee, please.",
+                    "translation": "أود أن أطلب قهوة، من فضلك.",
+                    "phonetic": "/aɪd laɪk tuː ˈɔːdər ə ˈkɒfi pliːz/",
+                    "explanation": "Polite way to order using 'I'd like to' (I would like to)",
+                    "grammarPoints": [
+                        "Modal 'would'",
+                        "Infinitive with 'to'",
+                        "Polite requests"
+                    ],
+                    "difficulty": 2
+                },
+                {
+                    "id": "s2",
+                    "text": "Can I have the menu?",
+                    "translation": "هل يمكنني الحصول على القائمة؟",
+                    "phonetic": "/kæn aɪ hæv ðə ˈmenjuː/",
+                    "explanation": "Asking for the menu politely",
+                    "grammarPoints": [
+                        "Modal 'can' for requests",
+                        "Article 'the'"
+                    ],
+                    "difficulty": 2
+                },
+                {
+                    "id": "s3",
+                    "text": "Do you have any vegetarian options?",
+                    "translation": "هل لديكم خيارات نباتية؟",
+                    "phonetic": "/duː juː hæv ˈeni ˌvedʒɪˈteəriən ˈɒpʃənz/",
+                    "explanation": "Asking about dietary options",
+                    "grammarPoints": [
+                        "Question with 'do'",
+                        "Quantifier 'any'",
+                        "Plural nouns"
+                    ],
+                    "difficulty": 2
+                },
+                {
+                    "id": "s4",
+                    "text": "Could you bring the check, please?",
+                    "translation": "هل يمكنك إحضار الفاتورة، من فضلك؟",
+                    "phonetic": "/kʊd juː brɪŋ ðə tʃek pliːz/",
+                    "explanation": "Polite request for the bill using 'could'",
+                    "grammarPoints": [
+                        "Modal 'could' for polite requests",
+                        "Definite article"
+                    ],
+                    "difficulty": 2
+                },
+                {
+                    "id": "s5",
+                    "text": "The food was delicious!",
+                    "translation": "كان الطعام لذيذاً!",
+                    "phonetic": "/ðə fuːd wɒz dɪˈlɪʃəs/",
+                    "explanation": "Complimenting the food",
+                    "grammarPoints": [
+                        "Past tense 'was'",
+                        "Adjectives"
+                    ],
+                    "difficulty": 2
+                }
+            ],
+            "vocabularyWords": [
+                {
+                    "id": "v1",
+                    "word": "menu",
+                    "translation": "قائمة الطعام",
+                    "partOfSpeech": "noun",
+                    "exampleSentence": "May I see the menu?",
+                    "exampleTranslation": "هل يمكنني رؤية القائمة؟"
+                },
+                {
+                    "id": "v2",
+                    "word": "order",
+                    "translation": "يطلب",
+                    "partOfSpeech": "verb",
+                    "exampleSentence": "I'd like to order now.",
+                    "exampleTranslation": "أود أن أطلب الآن."
+                },
+                {
+                    "id": "v3",
+                    "word": "delicious",
+                    "translation": "لذيذ",
+                    "partOfSpeech": "adjective",
+                    "exampleSentence": "This cake is delicious!",
+                    "exampleTranslation": "هذه الكعكة لذيذة!"
+                }
+            ]
+        },
+        {
+            "id": "b1-job-interview",
+            "title": "Job Interview Basics",
+            "description": "Practice common job interview questions and professional responses",
+            "level": "B1",
+            "category": "business",
+            "estimatedMinutes": 20,
+            "order": 4,
+            "isLocked": false,
+            "sentences": [
+                {
+                    "id": "s1",
+                    "text": "Tell me about yourself and why you're interested in this position.",
+                    "translation": "أخبرني عن نفسك ولماذا أنت مهتم بهذا المنصب.",
+                    "phonetic": "/tel miː əˈbaʊt jɔːˈself ænd waɪ jɔːr ˈɪntrəstɪd ɪn ðɪs pəˈzɪʃən/",
+                    "explanation": "Common opening question in interviews",
+                    "grammarPoints": [
+                        "Imperative form",
+                        "Present continuous for interest",
+                        "Preposition 'in'"
+                    ],
+                    "difficulty": 3
+                },
+                {
+                    "id": "s2",
+                    "text": "I have five years of experience in digital marketing.",
+                    "translation": "لدي خمس سنوات من الخبرة في التسويق الرقمي.",
+                    "phonetic": "/aɪ hæv faɪv jɪəz əv ɪkˈspɪəriəns ɪn ˈdɪdʒɪtl ˈmɑːkɪtɪŋ/",
+                    "explanation": "Describing your professional experience",
+                    "grammarPoints": [
+                        "Present perfect",
+                        "Preposition 'of'",
+                        "Compound nouns"
+                    ],
+                    "difficulty": 3
+                },
+                {
+                    "id": "s3",
+                    "text": "What are your greatest strengths and weaknesses?",
+                    "translation": "ما هي أعظم نقاط قوتك وضعفك؟",
+                    "phonetic": "/wɒt ɑːr jɔːr ˈgreɪtɪst streŋθs ænd ˈwiːknəsɪz/",
+                    "explanation": "Classic interview question about self-awareness",
+                    "grammarPoints": [
+                        "Superlatives",
+                        "Plural nouns",
+                        "Possessive pronoun"
+                    ],
+                    "difficulty": 3
+                },
+                {
+                    "id": "s4",
+                    "text": "I'm a team player who enjoys collaborating with others.",
+                    "translation": "أنا لاعب فريق يستمتع بالتعاون مع الآخرين.",
+                    "phonetic": "/aɪm ə tiːm ˈpleɪər huː ɪnˈdʒɔɪz kəˈlæbəreɪtɪŋ wɪð ˈʌðərz/",
+                    "explanation": "Describing positive professional qualities",
+                    "grammarPoints": [
+                        "Relative pronoun 'who'",
+                        "Gerund 'collaborating'",
+                        "Preposition 'with'"
+                    ],
+                    "difficulty": 3
+                }
+            ],
+            "vocabularyWords": [
+                {
+                    "id": "v1",
+                    "word": "experience",
+                    "translation": "خبرة",
+                    "partOfSpeech": "noun",
+                    "exampleSentence": "Do you have experience with project management?",
+                    "exampleTranslation": "هل لديك خبرة في إدارة المشاريع؟"
+                },
+                {
+                    "id": "v2",
+                    "word": "strength",
+                    "translation": "نقطة قوة",
+                    "partOfSpeech": "noun",
+                    "exampleSentence": "Communication is one of my strengths.",
+                    "exampleTranslation": "التواصل هو أحد نقاط قوتي."
+                },
+                {
+                    "id": "v3",
+                    "word": "collaborate",
+                    "translation": "يتعاون",
+                    "partOfSpeech": "verb",
+                    "exampleSentence": "We need to collaborate on this project.",
+                    "exampleTranslation": "نحتاج إلى التعاون في هذا المشروع."
+                }
+            ]
+        },
+        {
+            "id": "b2-business-presentation",
+            "title": "Business Presentations",
+            "description": "Master professional presentation language and techniques",
+            "level": "B2",
+            "category": "business",
+            "estimatedMinutes": 25,
+            "order": 5,
+            "isLocked": false,
+            "sentences": [
+                {
+                    "id": "s1",
+                    "text": "Good morning everyone. Today I'll be presenting our quarterly results.",
+                    "translation": "صباح الخير جميعاً. اليوم سأقدم نتائجنا الفصلية.",
+                    "phonetic": "/gʊd ˈmɔːnɪŋ ˈevriwʌn təˈdeɪ aɪl biː prɪˈzentɪŋ aʊər ˈkwɔːtərli rɪˈzʌlts/",
+                    "explanation": "Professional presentation opening",
+                    "grammarPoints": [
+                        "Future continuous",
+                        "Possessive 'our'",
+                        "Formal greetings"
+                    ],
+                    "difficulty": 4
+                },
+                {
+                    "id": "s2",
+                    "text": "As you can see from this graph, sales have increased by 25% this quarter.",
+                    "translation": "كما ترون من هذا الرسم البياني، زادت المبيعات بنسبة 25٪ هذا الربع.",
+                    "phonetic": "/æz juː kæn siː frɒm ðɪs græf seɪlz hæv ɪnˈkriːst baɪ ˈtwenti faɪv pərˈsent ðɪs ˈkwɔːtər/",
+                    "explanation": "Referring to visual data in presentations",
+                    "grammarPoints": [
+                        "Present perfect",
+                        "Preposition 'by' for percentage",
+                        "Demonstrative 'this'"
+                    ],
+                    "difficulty": 4
+                },
+                {
+                    "id": "s3",
+                    "text": "Moving on to the next slide, let's discuss our marketing strategy.",
+                    "translation": "بالانتقال إلى الشريحة التالية، دعونا نناقش استراتيجيتنا التسويقية.",
+                    "phonetic": "/ˈmuːvɪŋ ɒn tuː ðə nekst slaɪd lets dɪˈskʌs aʊər ˈmɑːkɪtɪŋ ˈstrætədʒi/",
+                    "explanation": "Transitioning between presentation topics",
+                    "grammarPoints": [
+                        "Gerund as subject",
+                        "Imperative 'let's'",
+                        "Possessive 'our'"
+                    ],
+                    "difficulty": 4
+                },
+                {
+                    "id": "s4",
+                    "text": "In conclusion, I believe we're on track to exceed our annual targets.",
+                    "translation": "في الختام، أعتقد أننا على المسار الصحيح لتجاوز أهدافنا السنوية.",
+                    "phonetic": "/ɪn kənˈkluːʒən aɪ bɪˈliːv wɪər ɒn træk tuː ɪkˈsiːd aʊər ˈænjuəl ˈtɑːgɪts/",
+                    "explanation": "Professional conclusion statement",
+                    "grammarPoints": [
+                        "Transition phrase",
+                        "Infinitive of purpose",
+                        "Possessive 'our'"
+                    ],
+                    "difficulty": 4
+                }
+            ],
+            "vocabularyWords": [
+                {
+                    "id": "v1",
+                    "word": "quarterly",
+                    "translation": "فصلي",
+                    "partOfSpeech": "adjective",
+                    "exampleSentence": "We review our progress quarterly.",
+                    "exampleTranslation": "نراجع تقدمنا كل ثلاثة أشهر."
+                },
+                {
+                    "id": "v2",
+                    "word": "strategy",
+                    "translation": "استراتيجية",
+                    "partOfSpeech": "noun",
+                    "exampleSentence": "We need a new marketing strategy.",
+                    "exampleTranslation": "نحتاج إلى استراتيجية تسويق جديدة."
+                },
+                {
+                    "id": "v3",
+                    "word": "exceed",
+                    "translation": "يتجاوز",
+                    "partOfSpeech": "verb",
+                    "exampleSentence": "We exceeded our sales target.",
+                    "exampleTranslation": "تجاوزنا هدف مبيعاتنا."
+                }
+            ]
+        }
+    ]
+}
