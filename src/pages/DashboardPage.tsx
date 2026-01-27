@@ -68,7 +68,7 @@ export const DashboardPage = () => {
                         className="mb-12"
                     >
                         <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-                            Welcome to <span className="text-gradient">GemiTalk AI</span>
+                            Welcome to <span className="text-gradient">MugiTalk AI</span>
                         </h1>
                         <p className="text-lg text-muted-foreground">
                             Your personal AI English coach. Let's make today count!
@@ -245,7 +245,7 @@ export const DashboardPage = () => {
                                                 {lesson.sentences.length} sentences
                                             </span>
                                             <Button variant="ghost" size="sm" className="gap-1">
-                                                Start <Sparkles className="w-3 h-3" />
+                                                Starts <Sparkles className="w-3 h-3" />
                                             </Button>
                                         </div>
                                     </div>

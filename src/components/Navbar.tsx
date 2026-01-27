@@ -23,7 +23,7 @@ export const Navbar = () => {
                   <Sparkles className="w-5 h-5 text-white" />
                 </div>
                 <span className="font-display font-bold text-xl">
-                  Gemini<span className="text-primary">Talk</span>
+                  Mugi<span className="text-primary">Talk</span>
                 </span>
               </a>
 

@@ -12,7 +12,7 @@ export const Footer = () => {
                 <Sparkles className="w-5 h-5 text-white" />
               </div>
               <span className="font-display font-bold text-xl">
-                Gemini<span className="text-primary">Talk</span>
+                Mugi<span className="text-primary">Talk</span>
               </span>
             </a>
             <p className="text-sm text-muted-foreground mb-6">
@@ -70,7 +70,7 @@ export const Footer = () => {
 
         <div className="pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2024 GeminiTalk AI. All rights reserved.
+            © 2024 MugiTalk AI. All rights reserved.
           </p>
           <p className="text-sm text-muted-foreground">
             Powered by Google Gemini AI
