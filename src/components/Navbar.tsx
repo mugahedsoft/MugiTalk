@@ -68,20 +68,20 @@ export const Navbar = () => {
                 className="md:hidden pt-4 pb-2"
               >
                 <div className="flex flex-col gap-4">
-                  <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">
-                    Features
+                  <a href="/dashboard" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">
+                    Dashboard
                   </a>
-                  <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">
-                    How it Works
+                  <a href="/lessons" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">
+                    Lessons
                   </a>
-                  <a href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">
-                    Pricing
+                  <a href="/conversation" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors py-2">
+                    Conversation
                   </a>
                   <div className="flex flex-col gap-2 pt-4 border-t border-border">
-                    <Button variant="ghost" className="justify-start">
+                    <Button variant="ghost" className="justify-start" onClick={() => window.location.href = '/dashboard'}>
                       Log In
                     </Button>
-                    <Button variant="default">
+                    <Button variant="default" onClick={() => window.location.href = '/lessons'}>
                       Get Started Free
                     </Button>
                   </div>

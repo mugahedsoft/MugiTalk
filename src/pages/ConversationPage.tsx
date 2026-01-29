@@ -103,6 +103,18 @@ export const ConversationPage = () => {
         }
     }, [transcript, isListening, resetSpeech]);
 
+    // Auto-speak AI responses
+    useEffect(() => {
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage && lastMessage.role === 'ai' && !isLoading) {
+            // Small delay to feel natural
+            const timer = setTimeout(() => {
+                speak(lastMessage.content);
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [messages, isLoading, speak]);
+
     const handleStartScenario = async (scenario: typeof scenarios[0]) => {
         setSelectedScenario(scenario);
         await startConversation(
@@ -140,7 +152,7 @@ export const ConversationPage = () => {
     if (!selectedScenario) {
         // Scenario Selection
         return (
-            <div className="min-h-screen bg-background py-20">
+            <div className="min-h-screen bg-background py-10 md:py-20">
                 <div className="container mx-auto px-6">
                     <div className="max-w-4xl mx-auto">
                         {/* Header */}
@@ -254,8 +266,8 @@ export const ConversationPage = () => {
                                 className={`flex mb-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
                                 <div className={`max-w-[80%] ${message.role === 'user'
-                                        ? 'bg-primary text-primary-foreground rounded-2xl rounded-br-md'
-                                        : 'bg-secondary text-secondary-foreground rounded-2xl rounded-bl-md'
+                                    ? 'bg-primary text-primary-foreground rounded-2xl rounded-br-md'
+                                    : 'bg-secondary text-secondary-foreground rounded-2xl rounded-bl-md'
                                     } p-4`}>
                                     {message.role === 'ai' && (
                                         <div className="text-xs font-semibold opacity-70 mb-1">
@@ -297,8 +309,8 @@ export const ConversationPage = () => {
                         <button
                             onClick={handleVoiceInput}
                             className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${isListening
-                                    ? 'bg-destructive text-white animate-pulse'
-                                    : 'bg-secondary hover:bg-secondary/80'
+                                ? 'bg-destructive text-white animate-pulse'
+                                : 'bg-secondary hover:bg-secondary/80'
                                 }`}
                             disabled={isLoading}
                         >

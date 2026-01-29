@@ -44,7 +44,7 @@ export const LessonsPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-background py-20">
+        <div className="min-h-screen bg-background py-10 md:py-20">
             <div className="container mx-auto px-6">
                 <div className="max-w-6xl mx-auto">
                     {/* Header */}
@@ -67,8 +67,8 @@ export const LessonsPage = () => {
                                         key={level}
                                         onClick={() => setFilterLevel(level)}
                                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${filterLevel === level
-                                                ? 'bg-primary text-primary-foreground shadow-md'
-                                                : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                                            ? 'bg-primary text-primary-foreground shadow-md'
+                                            : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                                             }`}
                                     >
                                         {level === 'all' ? 'All Levels' : level}
@@ -85,8 +85,8 @@ export const LessonsPage = () => {
                                         key={category}
                                         onClick={() => setFilterCategory(category)}
                                         className={`px-4 py-2 rounded-full text-sm font-medium capitalize transition-all ${filterCategory === category
-                                                ? 'bg-accent text-accent-foreground shadow-md'
-                                                : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                                            ? 'bg-accent text-accent-foreground shadow-md'
+                                            : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                                             }`}
                                     >
                                         {category === 'all' ? 'All Topics' : category.replace('-', ' ')}
@@ -108,8 +108,8 @@ export const LessonsPage = () => {
                                     animate={{ opacity: 1, y: 0 }}
                                     transition={{ delay: index * 0.1 }}
                                     className={`group p-6 rounded-2xl border transition-all duration-300 ${lesson.isLocked
-                                            ? 'bg-muted/50 border-border/50 opacity-75'
-                                            : 'bg-card border-border hover:border-primary/30 hover:shadow-lg cursor-pointer'
+                                        ? 'bg-muted/50 border-border/50 opacity-75'
+                                        : 'bg-card border-border hover:border-primary/30 hover:shadow-lg cursor-pointer'
                                         }`}
                                     onClick={() => !lesson.isLocked && handleStartLesson(lesson.id)}
                                 >
@@ -118,10 +118,10 @@ export const LessonsPage = () => {
                                         <div className="flex-1">
                                             <div className="flex items-center gap-2 mb-2">
                                                 <span className={`px-2 py-1 rounded-lg text-xs font-bold ${lesson.level === 'A1' ? 'bg-green-100 text-green-700' :
-                                                        lesson.level === 'A2' ? 'bg-blue-100 text-blue-700' :
-                                                            lesson.level === 'B1' ? 'bg-orange-100 text-orange-700' :
-                                                                lesson.level === 'B2' ? 'bg-purple-100 text-purple-700' :
-                                                                    'bg-gray-100 text-gray-700'
+                                                    lesson.level === 'A2' ? 'bg-blue-100 text-blue-700' :
+                                                        lesson.level === 'B1' ? 'bg-orange-100 text-orange-700' :
+                                                            lesson.level === 'B2' ? 'bg-purple-100 text-purple-700' :
+                                                                'bg-gray-100 text-gray-700'
                                                     }`}>
                                                     {lesson.level}
                                                 </span>

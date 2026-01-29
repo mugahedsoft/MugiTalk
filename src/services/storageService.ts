@@ -8,13 +8,13 @@
 import type { User, UserProgress, UserAchievement, Conversation, DailyGoal } from '@/types';
 
 const STORAGE_KEYS = {
-    USER: 'gemitalk_user',
-    PROGRESS: 'gemitalk_progress',
-    COMPLETED_LESSONS: 'gemitalk_completed_lessons',
-    ACHIEVEMENTS: 'gemitalk_achievements',
-    DAILY_GOAL: 'gemitalk_daily_goal',
-    CONVERSATIONS: 'gemitalk_conversations',
-    PREFERENCES: 'gemitalk_preferences',
+    USER: 'mugitalk_user',
+    PROGRESS: 'mugitalk_progress',
+    COMPLETED_LESSONS: 'mugitalk_completed_lessons',
+    ACHIEVEMENTS: 'mugitalk_achievements',
+    DAILY_GOAL: 'mugitalk_daily_goal',
+    CONVERSATIONS: 'mugitalk_conversations',
+    PREFERENCES: 'mugitalk_preferences',
 } as const;
 
 class LocalStorageService {

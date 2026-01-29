@@ -207,7 +207,7 @@ export const PracticePage = () => {
                 {/* Practice Card */}
                 <motion.div
                     layout
-                    className="p-8 rounded-3xl bg-card border border-border shadow-lg"
+                    className="p-6 md:p-8 rounded-3xl bg-card border border-border shadow-lg"
                 >
                     <AnimatePresence mode="wait">
                         {/* Listen Step */}
@@ -239,7 +239,7 @@ export const PracticePage = () => {
                                     </div>
                                 )}
 
-                                <div className="flex gap-3 mb-6">
+                                <div className="flex flex-col sm:flex-row gap-3 mb-6">
                                     <Button
                                         variant="outline"
                                         className="flex-1"
@@ -304,14 +304,14 @@ export const PracticePage = () => {
 
                                 <motion.button
                                     onClick={isListening ? handleStopRecording : handleStartRecording}
-                                    className={`w-32 h-32 mx-auto rounded-full flex items-center justify-center transition-all duration-300 ${isListening
+                                    className={`w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full flex items-center justify-center transition-all duration-300 ${isListening
                                             ? 'bg-destructive shadow-lg scale-110'
                                             : 'bg-primary hover:bg-primary/90 hover:scale-105'
                                         }`}
                                     whileTap={{ scale: 0.95 }}
                                     disabled={!isSupported}
                                 >
-                                    <Mic className={`w-12 h-12 text-white ${isListening ? 'animate-pulse' : ''}`} />
+                                    <Mic className={`w-10 h-10 md:w-12 md:h-12 text-white ${isListening ? 'animate-pulse' : ''}`} />
                                 </motion.button>
 
                                 <p className="mt-6 text-muted-foreground">

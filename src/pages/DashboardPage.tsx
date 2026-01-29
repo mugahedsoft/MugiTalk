@@ -58,7 +58,7 @@ export const DashboardPage = () => {
         : 0;
 
     return (
-        <div className="min-h-screen bg-background py-20">
+        <div className="min-h-screen bg-background py-10 md:py-20">
             <div className="container mx-auto px-6">
                 <div className="max-w-6xl mx-auto">
                     {/* Welcome Header */}

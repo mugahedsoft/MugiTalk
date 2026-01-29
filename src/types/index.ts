@@ -1,4 +1,4 @@
-// Core domain types and interfaces for GemiTalk platform
+// Core domain types and interfaces for MugiTalk platform
 // Following DDD principles with clear separation of concerns
 
 // ============================================================================
@@ -37,7 +37,7 @@ export interface UserProgress {
 // Learning Content Types
 // ============================================================================
 
-export type TopicCategory = 
+export type TopicCategory =
   | 'daily-life'
   | 'travel'
   | 'business'
@@ -89,7 +89,7 @@ export interface VocabularyWord {
 // Exercise & Practice Types
 // ============================================================================
 
-export type ExerciseType = 
+export type ExerciseType =
   | 'speaking'
   | 'listening'
   | 'reading'
@@ -152,7 +152,7 @@ export interface PronunciationFeedback {
 // AI Conversation Types
 // ============================================================================
 
-export type ConversationScenario = 
+export type ConversationScenario =
   | 'job-interview'
   | 'restaurant'
   | 'airport'
