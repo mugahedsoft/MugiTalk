@@ -8,11 +8,44 @@
 import { allLessons } from '@/data/lessonsData';
 import type { Lesson, UserLevel } from '@/types';
 
+const API_URL = 'http://localhost:3000/api';
+
 class LessonsService {
     private lessons: Lesson[];
 
     constructor() {
         this.lessons = allLessons as any[];
+    }
+
+    /**
+     * Generate a real AI lesson based on level and category
+     */
+    public async generateAILesson(level: UserLevel, category: string): Promise<Lesson> {
+        try {
+            const response = await fetch(`${API_URL}/lessons/generate`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ level, category }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to generate AI lesson');
+            }
+
+            const lesson = await response.json();
+
+            // Optionally cache or add to local list
+            if (!this.lessons.find(l => l.id === lesson.id)) {
+                this.lessons.push(lesson);
+            }
+
+            return lesson;
+        } catch (error) {
+            console.error('LessonsService AI Error:', error);
+            throw error;
+        }
     }
 
     /**

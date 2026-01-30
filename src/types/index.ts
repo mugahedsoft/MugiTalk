@@ -155,15 +155,7 @@ export interface PronunciationFeedback {
 // AI Conversation Types
 // ============================================================================
 
-export type ConversationScenario =
-  | 'job-interview'
-  | 'restaurant'
-  | 'airport'
-  | 'shopping'
-  | 'doctor'
-  | 'small-talk'
-  | 'negotiation'
-  | 'presentation';
+export type ConversationScenario = string;
 
 export interface Conversation {
   id: string;

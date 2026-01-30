@@ -34,15 +34,25 @@ export const LoginPage = () => {
 
         try {
             if (mode === 'login') {
-                await authService.signIn(email, password);
-                toast.success('Welcome back!');
-                navigate('/dashboard');
+                const data = await authService.signIn(email, password);
+                if (data.session) {
+                    toast.success('Welcome back!');
+                    navigate('/dashboard');
+                }
             } else {
-                await authService.signUp(email, password, fullName);
-                toast.success('Account created successfully!');
-                navigate('/dashboard');
+                const data = await authService.signUp(email, password, fullName);
+
+                // If sign up doesn't return a session, it means email verification is enabled
+                if (!data.session) {
+                    toast.success('Registration successful! Please verify your email.');
+                    navigate('/verify-email');
+                } else {
+                    toast.success('Account created successfully!');
+                    navigate('/placement'); // Direct new users to placement test
+                }
             }
         } catch (error: any) {
+            console.error('Auth submit error:', error);
             toast.error(error.message || 'Authentication failed');
         } finally {
             setIsLoading(false);
@@ -98,28 +108,30 @@ export const LoginPage = () => {
 
                 <div className="glass p-8 rounded-[40px] border-2 border-white/10 shadow-2xl relative overflow-hidden">
                     {/* Mode Toggle Tabs */}
-                    <div className="flex p-1 bg-secondary/50 rounded-2xl mb-8 relative">
+                    <div className="flex p-1.5 bg-secondary/40 backdrop-blur-xl rounded-2xl mb-8 border border-white/5 relative">
                         <motion.div
-                            className="absolute inset-y-1 bg-background rounded-xl shadow-sm z-0"
+                            className="absolute inset-y-1.5 left-1.5 bg-background rounded-xl shadow-lg z-0 ring-1 ring-white/10"
                             initial={false}
                             animate={{
                                 x: mode === 'login' ? '0%' : '100%',
-                                width: '50%'
+                                width: 'calc(50% - 3px)'
                             }}
-                            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                         />
                         <button
+                            type="button"
                             onClick={() => setMode('login')}
-                            className={`flex-1 flex items-center justify-center py-3 px-4 rounded-xl text-sm font-bold relative z-10 transition-colors ${mode === 'login' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                            className={`flex-1 flex items-center justify-center py-3 px-4 rounded-xl text-sm font-bold relative z-10 transition-all duration-300 ${mode === 'login' ? 'text-foreground scale-100' : 'text-muted-foreground hover:text-foreground scale-95'}`}
                         >
-                            <LogIn className="w-4 h-4 mr-2" />
+                            <LogIn className={`w-4 h-4 mr-2 transition-transform ${mode === 'login' ? 'rotate-0' : '-rotate-12'}`} />
                             Login
                         </button>
                         <button
+                            type="button"
                             onClick={() => setMode('register')}
-                            className={`flex-1 flex items-center justify-center py-3 px-4 rounded-xl text-sm font-bold relative z-10 transition-colors ${mode === 'register' ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+                            className={`flex-1 flex items-center justify-center py-3 px-4 rounded-xl text-sm font-bold relative z-10 transition-all duration-300 ${mode === 'register' ? 'text-foreground scale-100' : 'text-muted-foreground hover:text-foreground scale-95'}`}
                         >
-                            <UserPlus className="w-4 h-4 mr-2" />
+                            <UserPlus className={`w-4 h-4 mr-2 transition-transform ${mode === 'register' ? 'rotate-0' : 'rotate-12'}`} />
                             Register
                         </button>
                     </div>

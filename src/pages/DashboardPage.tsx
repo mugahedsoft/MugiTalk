@@ -25,11 +25,12 @@ import { lessonsService } from '@/services/lessonsService';
 import { gamificationService } from '@/services/gamificationService';
 import { useLocation } from 'react-router-dom';
 import type { UserProgress, DailyGoal, Lesson } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const DashboardPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [progress, setProgress] = useState<UserProgress | null>(null);
+    const { user, profile } = useAuth();
     const [dailyGoal, setDailyGoal] = useState<DailyGoal | null>(null);
     const [recommendedLessons, setRecommendedLessons] = useState<Lesson[]>([]);
 
@@ -46,29 +47,29 @@ export const DashboardPage = () => {
             window.history.replaceState({}, document.title);
         }
 
-        // Load user data
-        const userProgress = storageService.getProgress() || {
-            userId: 'local',
-            totalXP: 0,
-            currentStreak: 0,
-            longestStreak: 0,
-            lessonsCompleted: 0,
-            exercisesCompleted: 0,
-            pronunciationAccuracy: 0,
-            level: 'A1',
-            weeklyGoal: 150,
-            weeklyProgress: 0,
-        };
-        setProgress(userProgress);
-
         const goal = storageService.getDailyGoal();
         setDailyGoal(goal);
 
         // Get recommended lessons
-        const completed = storageService.getCompletedLessons();
-        const recommended = lessonsService.getRecommendedLessons(userProgress.level, completed);
-        setRecommendedLessons(recommended);
-    }, [location.state]);
+        if (profile) {
+            const completed = storageService.getCompletedLessons();
+            const recommended = lessonsService.getRecommendedLessons(profile.level, completed);
+            setRecommendedLessons(recommended);
+        }
+    }, [location.state, profile]);
+
+    const progress = profile || {
+        userId: user?.id || 'local',
+        totalXP: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        lessonsCompleted: 0,
+        exercisesCompleted: 0,
+        pronunciationAccuracy: 0,
+        level: 'A1',
+        weeklyGoal: 150,
+        weeklyProgress: 0,
+    };
 
     const dailyProgress = dailyGoal
         ? Math.min(100, (dailyGoal.completedMinutes / dailyGoal.targetMinutes) * 100)
@@ -119,7 +120,7 @@ export const DashboardPage = () => {
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div>
                                 <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-                                    Welcome back, <span className="text-gradient">Language Master</span>
+                                    Welcome back, <span className="text-gradient">{user?.user_metadata?.full_name || 'Language Learner'}</span>
                                 </h1>
                                 <p className="text-lg text-muted-foreground">
                                     You're doing amazing. Your current streak is {progress?.currentStreak} days!

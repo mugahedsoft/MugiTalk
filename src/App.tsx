@@ -17,6 +17,7 @@ const PlacementTestPage = lazy(() => import("./pages/PlacementTestPage"));
 const WordBankPage = lazy(() => import("./pages/WordBankPage"));
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 const LoginPage = lazy(() => import("./pages/LoginPage"));
+const VerifyEmailPage = lazy(() => import("./pages/VerifyEmailPage"));
 
 const queryClient = new QueryClient();
 
@@ -28,10 +29,17 @@ const PageLoader = () => (
 
 // Protected Route Component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { user, loading } = useAuth();
+  const { user, profile, loading } = useAuth();
+  const location = window.location.pathname;
 
   if (loading) return <PageLoader />;
   if (!user) return <Navigate to="/login" replace />;
+
+  // Smart Onboarding: If user is new (A1 with 0 XP) and not on placement page, nudge them
+  const isNewUser = profile?.level === 'A1' && profile?.totalXP === 0;
+  if (isNewUser && location !== '/placement' && location !== '/verify-email') {
+    return <Navigate to="/placement" replace />;
+  }
 
   return <>{children}</>;
 };
@@ -48,6 +56,7 @@ const App = () => (
               {/* Landing Page */}
               <Route path="/" element={<Index />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/verify-email" element={<VerifyEmailPage />} />
 
               {/* App Pages (Protected) */}
               <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />

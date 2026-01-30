@@ -86,9 +86,9 @@ Instructions:
 
             this.chatHistory.push({ role: 'model', parts: text });
             return text;
-        } catch (error) {
+        } catch (error: any) {
             console.error('Gemini API Error:', error);
-            throw new Error('Failed to connect to AI service. Ensure backend is running.');
+            throw new Error(error.message || 'Failed to connect to AI service. Ensure backend is running.');
         }
     }
 
@@ -134,6 +134,61 @@ Instructions:
         } catch (error) {
             console.error('Analysis Error:', error);
             return { overallScore: 0, wordBreakdown: [], strengths: [], improvements: [], aiTip: "Could not analyze" };
+        }
+    }
+
+    public async generateScenarios(level: string): Promise<any[]> {
+        try {
+            const response = await fetch(`${API_URL}/scenarios/generate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ level })
+            });
+
+            if (!response.ok) throw new Error('Failed to generate scenarios');
+            return await response.json();
+        } catch (error) {
+            console.error('Scenario Generation Error:', error);
+            return [];
+        }
+    }
+
+    public async translate(text: string, targetLang: string = 'Arabic'): Promise<string> {
+        try {
+            const response = await fetch(`${API_URL}/translate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text, targetLang })
+            });
+
+            if (!response.ok) throw new Error('Translation failed');
+            const data = await response.json();
+            return data.translatedText;
+        } catch (error) {
+            console.error('Translation Error:', error);
+            return 'Translation error';
+        }
+    }
+
+    public async generateConversationSummary(history: any[]): Promise<any> {
+        try {
+            const response = await fetch(`${API_URL}/conversation/summary`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ history })
+            });
+
+            if (!response.ok) throw new Error('Summary fallback');
+            return await response.json();
+        } catch (error) {
+            console.error('Summary Error:', error);
+            return {
+                summary: "Great job practicing today!",
+                strengths: ["Consistency", "Engagement"],
+                weaknesses: ["N/A"],
+                nextSteps: ["Keep practicing more scenarios!"],
+                overallGrade: "A2"
+            };
         }
     }
 

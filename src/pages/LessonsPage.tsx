@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,20 +10,26 @@ import {
     Search,
     Filter,
     Clock,
-    Star
+    Star,
+    Sparkles,
+    Loader2
 } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { lessonsService } from '@/services/lessonsService';
 import { storageService } from '@/services/storageService';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 import type { Lesson, UserLevel } from '@/types';
 
 export const LessonsPage = () => {
     const navigate = useNavigate();
+    const { user, profile } = useAuth();
     const [lessons, setLessons] = useState<Lesson[]>([]);
     const [completedLessons, setCompletedLessons] = useState<string[]>([]);
-    const [filterLevel, setFilterLevel] = useState<UserLevel | 'all'>('all');
+    const [filterLevel, setFilterLevel] = useState<UserLevel | 'all'>(profile?.level || 'all');
     const [filterCategory, setFilterCategory] = useState<string>('all');
     const [searchQuery, setSearchQuery] = useState("");
+    const [isGenerating, setIsGenerating] = useState(false);
 
     useEffect(() => {
         // Load lessons with search support
@@ -50,6 +56,24 @@ export const LessonsPage = () => {
         navigate(`/practice/${lessonId}`);
     };
 
+    const handleGenerateDynamicLesson = async () => {
+        const targetLevel = filterLevel === 'all' ? 'A2' : filterLevel;
+        const targetCategory = filterCategory === 'all' ? 'Daily Life' : filterCategory;
+
+        setIsGenerating(true);
+        toast.loading("AI is crafting your custom lesson...", { id: "gen-lesson" });
+
+        try {
+            const lesson = await lessonsService.generateAILesson(targetLevel as UserLevel, targetCategory);
+            toast.success("Lesson Manifested!", { id: "gen-lesson" });
+            navigate(`/practice/${lesson.id}`);
+        } catch (error) {
+            toast.error("Failed to generate AI lesson. Is the server running?", { id: "gen-lesson" });
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+
     // Group lessons by category for the roadmap
     const modules = categories.filter(c => c !== 'all').map(category => ({
         name: category,
@@ -62,27 +86,45 @@ export const LessonsPage = () => {
                 <div className="max-w-6xl mx-auto">
                     {/* Header */}
                     <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
-                        <div>
+                        <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-4">
+                                <Sparkles className="w-6 h-6 text-primary animate-pulse" />
+                                <span className="text-sm font-black text-primary uppercase tracking-widest">AI Intelligence Active</span>
+                            </div>
                             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
                                 Your Academic <span className="text-gradient">Roadmap</span>
                             </h1>
                             <p className="text-lg text-muted-foreground">
-                                Structured modules designed by AI to take you from {filterLevel === 'all' ? 'A1' : filterLevel} to perfection.
+                                Real-time dynamic modules crafted by Gemini to take you from {filterLevel === 'all' ? 'A1' : filterLevel} to perfection.
                             </p>
                         </div>
-                        <div className="flex gap-2">
-                            {levels.map((level) => (
-                                <button
-                                    key={level}
-                                    onClick={() => setFilterLevel(level)}
-                                    className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterLevel === level
-                                        ? 'bg-primary text-white shadow-md scale-105'
-                                        : 'bg-muted text-muted-foreground hover:bg-muted/80'
-                                        }`}
-                                >
-                                    {level === 'all' ? 'Expert Path' : level}
-                                </button>
-                            ))}
+                        <div className="flex flex-col gap-4">
+                            <Button
+                                onClick={handleGenerateDynamicLesson}
+                                disabled={isGenerating}
+                                className="h-14 px-8 rounded-2xl bg-gradient-to-r from-primary to-accent hover:shadow-xl hover:shadow-primary/20 transition-all font-bold group"
+                            >
+                                {isGenerating ? (
+                                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                                ) : (
+                                    <Sparkles className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+                                )}
+                                Manifest Fresh AI Lesson
+                            </Button>
+                            <div className="flex gap-2">
+                                {levels.map((level) => (
+                                    <button
+                                        key={level}
+                                        onClick={() => setFilterLevel(level)}
+                                        className={`px-4 py-2 rounded-xl text-xs font-bold transition-all ${filterLevel === level
+                                            ? 'bg-primary text-white shadow-md scale-105'
+                                            : 'bg-muted text-muted-foreground hover:bg-muted/80'
+                                            }`}
+                                    >
+                                        {level === 'all' ? 'Expert Path' : level}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
@@ -118,8 +160,8 @@ export const LessonsPage = () => {
                                                 initial={{ opacity: 0, y: 20 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 className={`group p-6 rounded-3xl border transition-all duration-300 relative overflow-hidden ${lesson.isLocked
-                                                        ? 'bg-muted/20 border-border/30 grayscale'
-                                                        : 'bg-card border-border hover:border-primary/50 hover:shadow-2xl cursor-pointer'
+                                                    ? 'bg-muted/20 border-border/30 grayscale'
+                                                    : 'bg-card border-border hover:border-primary/50 hover:shadow-2xl cursor-pointer'
                                                     }`}
                                                 onClick={() => !lesson.isLocked && handleStartLesson(lesson.id)}
                                             >
@@ -132,8 +174,8 @@ export const LessonsPage = () => {
                                                 <div className="flex items-center gap-3 mb-4">
                                                     <span className="text-xs font-black opacity-30">#{index + 1}</span>
                                                     <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase ${lesson.level.startsWith('A') ? 'bg-green-500/10 text-green-600' :
-                                                            lesson.level.startsWith('B') ? 'bg-orange-500/10 text-orange-600' :
-                                                                'bg-red-500/10 text-red-600'
+                                                        lesson.level.startsWith('B') ? 'bg-orange-500/10 text-orange-600' :
+                                                            'bg-red-500/10 text-red-600'
                                                         }`}>
                                                         {lesson.level}
                                                     </span>

@@ -14,18 +14,24 @@ import {
 } from 'lucide-react';
 import { wordBankService, BoxItem } from '@/services/wordBankService';
 import { useTextToSpeech } from '@/hooks/useTextToSpeech';
+import { storageService } from '@/services/storageService';
 import { gamificationService } from '@/services/gamificationService';
 import { Navbar } from '@/components/Navbar';
 import { Sparkles } from 'lucide-react';
 
+import { useAuth } from '@/contexts/AuthContext';
+import { userService } from '@/services/userService';
+
 export const WordBankPage = () => {
     const navigate = useNavigate();
+    const { user, refreshProfile } = useAuth();
     const [dueItems, setDueItems] = useState<BoxItem[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
     const [sessionComplete, setSessionComplete] = useState(false);
     const [earnedXP, setEarnedXP] = useState(0);
     const [leveledUp, setLeveledUp] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
     const { speak } = useTextToSpeech();
 
     useEffect(() => {
@@ -33,25 +39,41 @@ export const WordBankPage = () => {
         setDueItems(items);
     }, []);
 
-    const handleResult = (success: boolean) => {
+    const handleResult = async (success: boolean) => {
         const item = dueItems[currentIndex];
         wordBankService.updateReview(item.id, success);
 
-        if (success) {
-            setEarnedXP(prev => prev + 5);
-        }
+        const currentEarned = success ? 5 : 0;
+        setEarnedXP(prev => prev + currentEarned);
 
         if (currentIndex < dueItems.length - 1) {
             setCurrentIndex(prev => prev + 1);
             setIsFlipped(false);
         } else {
             // End of session - update global progress
-            const finalXP = earnedXP + (success ? 5 : 0);
-            const { leveledUp: isLevelUp } = gamificationService.updateProgress(finalXP);
+            setIsSaving(true);
+            const totalSessionXP = earnedXP + currentEarned;
+            const { leveledUp: isLevelUp } = gamificationService.updateProgress(totalSessionXP);
+
+            // SYNC TO CLOUD
+            if (user) {
+                try {
+                    const currentProgress = storageService.getProgress();
+                    if (currentProgress) {
+                        await userService.updateRemoteProgress(user.id, currentProgress);
+                        await refreshProfile();
+                    }
+                } catch (err) {
+                    console.error('WordBank Sync Error:', err);
+                }
+            }
+
             setLeveledUp(isLevelUp);
+            setIsSaving(false);
             setSessionComplete(true);
         }
     };
+
 
     if (dueItems.length === 0 && !sessionComplete) {
         return (

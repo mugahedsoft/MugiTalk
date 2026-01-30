@@ -18,6 +18,8 @@ import { useGeminiAI } from '@/hooks/useGeminiAI';
 import { storageService } from '@/services/storageService';
 import { lessonsService } from '@/services/lessonsService';
 import type { UserLevel } from '@/types';
+import { useAuth } from '@/contexts/AuthContext';
+import { userService } from '@/services/userService';
 
 const TEST_SENTENCES = [
     { text: "The cat is on the table.", level: "A1" as UserLevel, translation: "القطة على الطاولة." },
@@ -27,6 +29,7 @@ const TEST_SENTENCES = [
 
 export const PlacementTestPage = () => {
     const navigate = useNavigate();
+    const { user, refreshProfile } = useAuth();
     const [step, setStep] = useState<'intro' | 'testing' | 'analyzing' | 'result'>('intro');
     const [currentIdx, setCurrentIdx] = useState(0);
     const [scores, setScores] = useState<{ level: UserLevel, score: number }[]>([]);
@@ -54,8 +57,6 @@ export const PlacementTestPage = () => {
     };
 
     const calculateResult = async () => {
-        // Logic to determine level
-        // Simple heuristic: highest level with > 70% score
         let determinedLevel: UserLevel = 'A1';
         const sortedScores = [...scores].sort((a, b) => {
             const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
@@ -69,7 +70,7 @@ export const PlacementTestPage = () => {
 
         setFinalLevel(determinedLevel);
 
-        // Save to storage
+        // Save to local storage
         const progress = storageService.getProgress() || {
             userId: 'local',
             totalXP: 0,
@@ -83,13 +84,26 @@ export const PlacementTestPage = () => {
             weeklyProgress: 0,
         };
 
-        storageService.setProgress({
+        const updatedProgress = {
             ...progress,
             level: determinedLevel
-        });
+        };
+
+        storageService.setProgress(updatedProgress);
+
+        // SYNC TO CLOUD
+        if (user) {
+            try {
+                await userService.updateRemoteProgress(user.id, updatedProgress);
+                await refreshProfile();
+            } catch (err) {
+                console.error('Placement Sync Error:', err);
+            }
+        }
 
         setTimeout(() => setStep('result'), 2000);
     };
+
 
     return (
         <div className="min-h-screen bg-background flex items-center justify-center py-20 px-6">

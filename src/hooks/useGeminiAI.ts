@@ -6,7 +6,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { geminiService } from '@/services/geminiService';
-import type { ConversationMessage, GrammarCorrection } from '@/types';
+import type { ConversationMessage, GrammarCorrection, PronunciationFeedback } from '@/types';
 
 interface UseGeminiAIReturn {
     messages: ConversationMessage[];
@@ -16,6 +16,10 @@ interface UseGeminiAIReturn {
     startConversation: (scenario: string, level: string, role: string) => Promise<void>;
     sendMessage: (message: string) => Promise<void>;
     analyzeText: (text: string, expected?: string) => Promise<GrammarCorrection[]>;
+    translateText: (text: string, targetLang?: string) => Promise<string>;
+    generateScenarios: (level: string) => Promise<any[]>;
+    generateSummary: () => Promise<any>;
+    getPronunciationFeedback: (text: string, originalText: string) => Promise<PronunciationFeedback>;
     clearConversation: () => void;
 }
 
@@ -121,6 +125,42 @@ export const useGeminiAI = (): UseGeminiAIReturn => {
         }
     }, [isReady]);
 
+    const generateScenarios = useCallback(async (level: string) => {
+        setIsLoading(true);
+        try {
+            return await geminiService.generateScenarios(level);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [isReady]);
+
+    const translateText = useCallback(async (text: string, targetLang?: string) => {
+        setIsLoading(true);
+        try {
+            return await geminiService.translate(text, targetLang);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [isReady]);
+
+    const generateSummary = useCallback(async () => {
+        setIsLoading(true);
+        try {
+            return await geminiService.generateConversationSummary(messages);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [isReady, messages]);
+
+    const getPronunciationFeedback = useCallback(async (text: string, originalText: string) => {
+        setIsLoading(true);
+        try {
+            return await geminiService.getPronunciationFeedback(text, originalText);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [isReady]);
+
     const clearConversation = useCallback(() => {
         setMessages([]);
         setError(null);
@@ -136,6 +176,10 @@ export const useGeminiAI = (): UseGeminiAIReturn => {
         startConversation,
         sendMessage,
         analyzeText,
+        translateText,
+        generateScenarios,
+        generateSummary,
+        getPronunciationFeedback,
         clearConversation,
     };
-};
+}

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authService } from '@/services/authService';
 import { userService } from '@/services/userService';
+import { supabase } from '@/lib/supabase';
 import type { User, UserProgress } from '@/types';
 
 interface AuthContextType {
@@ -21,24 +22,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         // Initial session check
         const init = async () => {
-            try {
-                const session = await authService.getSession();
-                if (session?.user) {
-                    setUser(session.user);
+            const { data: { session } } = await supabase.auth.getSession();
+            if (session?.user) {
+                setUser(session.user);
+                try {
                     const userProfile = await userService.syncProgress(session.user.id);
                     setProfile(userProfile);
+                } catch (err) {
+                    console.error('Initial profile sync failed:', err);
                 }
-            } catch (err) {
-                console.error('Auth initialization failed', err);
-            } finally {
-                setLoading(false);
             }
+            setLoading(false);
         };
 
         init();
 
-        // Listen for auth state changes
-        // Note: In a real app we'd use supabase.auth.onAuthStateChange
+        // Listen for auth state changes (PRO FIX)
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+            console.log('Auth state change:', event, !!session);
+
+            if (session?.user) {
+                setUser(session.user);
+                try {
+                    const userProfile = await userService.syncProgress(session.user.id);
+                    setProfile(userProfile);
+                } catch (err) {
+                    console.error('Sync error during auth change:', err);
+                }
+            } else {
+                setUser(null);
+                setProfile(null);
+            }
+            setLoading(false);
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        };
     }, []);
 
     const refreshProfile = async () => {

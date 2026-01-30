@@ -32,6 +32,8 @@ import { wordBankService } from '@/services/wordBankService';
 import { gamificationService } from '@/services/gamificationService';
 import type { Lesson, Sentence, PronunciationFeedback } from '@/types';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { userService } from '@/services/userService';
 
 type PracticeStep = 'listen' | 'speak' | 'feedback';
 
@@ -124,11 +126,13 @@ export const PracticePage = () => {
         }, 800);
     };
 
-    const [completedSentences, setCompletedSentences] = useState<{ accuracy: number }[]>([]);
+    const { user, refreshProfile } = useAuth();
+    const [isSaving, setIsSaving] = useState(false);
 
-    const handleCompleteLesson = () => {
+    const handleCompleteLesson = async () => {
         if (!lesson) return;
 
+        setIsSaving(true);
         // Calculate average accuracy
         const avgScore = sessionScore.length > 0
             ? Math.round(sessionScore.reduce((a, b) => a + b, 0) / sessionScore.length)
@@ -138,15 +142,37 @@ export const PracticePage = () => {
         const earnedXP = gamificationService.calculateXP(100, avgScore, lesson.level);
         const { leveledUp, nextLevel } = gamificationService.updateProgress(earnedXP);
 
-        // Record completion
+        // Record completion locally
         storageService.saveLessonCompletion(lesson.id, avgScore);
 
-        // Update daily goal
+        // Update daily goal locally
         storageService.updateDailyGoal(lesson.estimatedMinutes);
 
+        // SYNC TO CLOUD if user is logged in
+        if (user) {
+            try {
+                const currentProgress = storageService.getProgress();
+                if (currentProgress) {
+                    await userService.updateRemoteProgress(user.id, currentProgress);
+                    await refreshProfile();
+                }
+            } catch (err) {
+                console.error('Failed to sync progress to cloud:', err);
+            }
+        }
+
+        setIsSaving(false);
         // Navigate with state for celebration
-        navigate('/dashboard', { state: { leveledUp, nextLevel, earnedXP } });
+        navigate('/dashboard', {
+            state: {
+                leveledUp,
+                nextLevel,
+                earnedXP,
+                level: nextLevel
+            }
+        });
     };
+
 
     const handleNextSentence = () => {
         if (!lesson) return;
