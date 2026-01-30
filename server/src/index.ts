@@ -6,6 +6,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // Load env vars
 dotenv.config({ path: '../.env' }); // Load from root .env
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,11 +17,13 @@ app.use(express.json());
 
 // Initialize Gemini
 const apiKey = process.env.VITE_GEMINI_API_KEY;
-if (!apiKey) {
-    console.warn('⚠️ Warning: VITE_GEMINI_API_KEY is not set in environment variables');
+if (apiKey) {
+    console.log('✅ Gemini API Key identified successfully');
+} else {
+    console.error('❌ ERROR: VITE_GEMINI_API_KEY is missing. Check your .env file.');
 }
 const genAI = new GoogleGenerativeAI(apiKey || '');
-const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
 // Health Check
 app.get('/health', (req, res) => {
@@ -70,11 +73,18 @@ CRITICAL RULES FOR AI:
 User: ${message}`;
         }
 
-        const result = await chat.sendMessage(prompt);
-        const response = await result.response;
-        const text = response.text();
-
-        res.json({ response: text });
+        try {
+            const result = await chat.sendMessage(prompt);
+            const response = await result.response;
+            const text = response.text();
+            res.json({ response: text });
+        } catch (aiError: any) {
+            console.error('Gemini Fetch/API Error:', aiError);
+            if (aiError.message?.includes('fetch failed')) {
+                return res.status(500).json({ error: 'الخادم غير قادر على الاتصال بـ Google API. يرجى التحقق من اتصال الإنترنت أو إعدادات الشبكة.' });
+            }
+            res.status(500).json({ error: aiError.message || 'Failed to generate response' });
+        }
     } catch (error: any) {
         console.error('AI Error:', error);
         res.status(500).json({ error: error.message || 'Failed to generate response' });
@@ -111,17 +121,17 @@ Output format:
 `;
         } else if (type === 'pronunciation') {
             prompt = `
-Compare the spoken text with the expected text for pronunciation training.
-Identify words that were likely mispronounced or missed based on the comparison.
-Text said: "${text}"
-Target text: "${expected}"
+Analyze the pronunciation of this English learner.
+Target Sentence: "${expected}"
+Learner's Attempt: "${text}"
 
-Output JSON format:
+Provide a professional, clinical linguistic analysis in JSON format:
 {
   "score": number (0-100),
-  "feedback": "overall positive feedback",
-  "words": [
-    { "word": "word", "status": "correct" | "incorrect" | "missing", "tip": "optional tip" }
+  "overallFeedback": "Professional summary in Arabic",
+  "aiTip": "Clinical tip in Arabic about tongue placement or stress",
+  "wordBreakdown": [
+    { "word": "word", "accuracy": number, "status": "perfect" | "good" | "needs-work" | "incorrect", "phoneticHelp": "IPA or simple guide" }
   ]
 }
 `;

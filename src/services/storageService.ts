@@ -81,6 +81,7 @@ class LocalStorageService {
             lessonsCompleted: 0,
             exercisesCompleted: 0,
             pronunciationAccuracy: 0,
+            level: 'A1',
             weeklyGoal: 150, // 150 minutes per week
             weeklyProgress: 0,
         };
@@ -92,15 +93,23 @@ class LocalStorageService {
         return this.get<string[]>(STORAGE_KEYS.COMPLETED_LESSONS) || [];
     }
 
-    public addCompletedLesson(lessonId: string): void {
+    public saveLessonCompletion(lessonId: string, accuracy: number): void {
         const completed = this.getCompletedLessons();
         if (!completed.includes(lessonId)) {
             completed.push(lessonId);
             this.set(STORAGE_KEYS.COMPLETED_LESSONS, completed);
-
-            // Update progress count
-            this.updateProgress({ lessonsCompleted: completed.length });
         }
+
+        // Update global accuracy and lesson count
+        const current = this.getProgress() || this.getDefaultProgress();
+        const newTotalLessons = completed.length;
+        // Simple average for pronunciation accuracy
+        const newAccuracy = Math.round((current.pronunciationAccuracy + accuracy) / 2);
+
+        this.updateProgress({
+            lessonsCompleted: newTotalLessons,
+            pronunciationAccuracy: newAccuracy
+        });
     }
 
     public isLessonCompleted(lessonId: string): boolean {

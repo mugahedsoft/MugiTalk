@@ -13,6 +13,10 @@ const DashboardPage = lazy(() => import("./pages/DashboardPage"));
 const LessonsPage = lazy(() => import("./pages/LessonsPage"));
 const PracticePage = lazy(() => import("./pages/PracticePage"));
 const ConversationPage = lazy(() => import("./pages/ConversationPage"));
+const PlacementTestPage = lazy(() => import("./pages/PlacementTestPage"));
+const WordBankPage = lazy(() => import("./pages/WordBankPage"));
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+const LoginPage = lazy(() => import("./pages/LoginPage"));
 
 const queryClient = new QueryClient();
 
@@ -22,30 +26,46 @@ const PageLoader = () => (
   </div>
 );
 
+// Protected Route Component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, loading } = useAuth();
+
+  if (loading) return <PageLoader />;
+  if (!user) return <Navigate to="/login" replace />;
+
+  return <>{children}</>;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            {/* Landing Page */}
-            <Route path="/" element={<Index />} />
+      <AuthProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              {/* Landing Page */}
+              <Route path="/" element={<Index />} />
+              <Route path="/login" element={<LoginPage />} />
 
-            {/* App Pages */}
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/lessons" element={<LessonsPage />} />
-            <Route path="/practice/:lessonId" element={<PracticePage />} />
-            <Route path="/conversation" element={<ConversationPage />} />
+              {/* App Pages (Protected) */}
+              <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+              <Route path="/lessons" element={<ProtectedRoute><LessonsPage /></ProtectedRoute>} />
+              <Route path="/practice/:lessonId" element={<ProtectedRoute><PracticePage /></ProtectedRoute>} />
+              <Route path="/conversation" element={<ProtectedRoute><ConversationPage /></ProtectedRoute>} />
+              <Route path="/placement" element={<ProtectedRoute><PlacementTestPage /></ProtectedRoute>} />
+              <Route path="/review" element={<ProtectedRoute><WordBankPage /></ProtectedRoute>} />
 
-            {/* Catch-all */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
+              {/* Catch-all */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
+
 
 export default App;

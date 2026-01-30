@@ -2,8 +2,20 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Mic, Sparkles, MessageCircle, Brain } from "lucide-react";
 import heroIllustration from "@/assets/hero-illustration.png";
+import { useNavigate } from "react-router-dom";
+import { storageService } from "@/services/storageService";
 
 export const HeroSection = () => {
+  const navigate = useNavigate();
+
+  const handleStart = () => {
+    const progress = storageService.getProgress();
+    if (progress && progress.lessonsCompleted > 0) {
+      navigate('/dashboard');
+    } else {
+      navigate('/placement');
+    }
+  };
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Animated background */}
@@ -11,7 +23,7 @@ export const HeroSection = () => {
 
       {/* Floating orbs */}
       <motion.div
-        className="absolute top-20 left-20 w-64 h-64 rounded-full bg-primary/20 blur-3xl"
+        className="absolute top-30 left-20 w-64 h-64 rounded-full bg-primary/20 blur-3xl"
         animate={{
           x: [0, 30, 0],
           y: [0, -30, 0],
@@ -48,17 +60,17 @@ export const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-accent my-6"
             >
               <Sparkles className="w-4 h-4" />
-              <span className="text-sm font-medium">Powered by Google Gemini AI</span>
+              <span className="text-sm font-medium ">Powered by Google Gemini AI</span>
             </motion.div>
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.6 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight mb-6"
+              className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight my-6"
             >
               Your Personal
               <span className="block text-gradient">AI Language Coach</span>
@@ -81,7 +93,7 @@ export const HeroSection = () => {
               transition={{ delay: 0.5, duration: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
             >
-              <Button variant="hero" size="xl" onClick={() => window.location.href = '/dashboard'}>
+              <Button variant="hero" size="xl" onClick={handleStart}>
                 <Mic className="w-5 h-5" />
                 Start Learning Free
               </Button>

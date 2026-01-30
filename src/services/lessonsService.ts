@@ -5,14 +5,14 @@
  * an interface for accessing learning content
  */
 
-import lessonsData from '@/data/lessons.json';
-import type { Lesson, UserProgress, UserLevel } from '@/types';
+import { allLessons } from '@/data/lessonsData';
+import type { Lesson, UserLevel } from '@/types';
 
 class LessonsService {
     private lessons: Lesson[];
 
     constructor() {
-        this.lessons = lessonsData.lessons as Lesson[];
+        this.lessons = allLessons as any[];
     }
 
     /**

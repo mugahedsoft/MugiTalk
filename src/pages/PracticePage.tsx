@@ -27,7 +27,10 @@ import { useTextToSpeech } from '@/hooks/useTextToSpeech';
 import { useGeminiAI } from '@/hooks/useGeminiAI';
 import { lessonsService } from '@/services/lessonsService';
 import { storageService } from '@/services/storageService';
-import type { Lesson, Sentence } from '@/types';
+import { geminiService } from '@/services/geminiService';
+import { wordBankService } from '@/services/wordBankService';
+import { gamificationService } from '@/services/gamificationService';
+import type { Lesson, Sentence, PronunciationFeedback } from '@/types';
 import { useNavigate, useParams } from 'react-router-dom';
 
 type PracticeStep = 'listen' | 'speak' | 'feedback';
@@ -87,22 +90,71 @@ export const PracticePage = () => {
         startListening(currentSentence.text);
     };
 
-    const handleStopRecording = () => {
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [aiFeedback, setAiFeedback] = useState<PronunciationFeedback | null>(null);
+
+    const handleStopRecording = async () => {
         stopListening();
-        // Automatically move to feedback step
-        setTimeout(() => {
-            if (transcript) {
+        setIsAnalyzing(true);
+
+        // Wait a bit for transcript to stabilize
+        setTimeout(async () => {
+            if (transcript && currentSentence) {
+                try {
+                    const feedback = await geminiService.getPronunciationFeedback(transcript, currentSentence.text);
+                    setAiFeedback(feedback);
+                    setAiTip(feedback.aiTip || '');
+
+                    // Add to word bank if accuracy is low (< 70%) for later review
+                    if (feedback.overallScore < 70) {
+                        wordBankService.addToBank(currentSentence);
+                    }
+
+                    setStep('feedback');
+                } catch (err) {
+                    console.error("AI Analysis failed", err);
+                    setStep('feedback');
+                } finally {
+                    setIsAnalyzing(false);
+                }
+            } else {
                 setStep('feedback');
+                setIsAnalyzing(false);
             }
-        }, 500);
+        }, 800);
+    };
+
+    const [completedSentences, setCompletedSentences] = useState<{ accuracy: number }[]>([]);
+
+    const handleCompleteLesson = () => {
+        if (!lesson) return;
+
+        // Calculate average accuracy
+        const avgScore = sessionScore.length > 0
+            ? Math.round(sessionScore.reduce((a, b) => a + b, 0) / sessionScore.length)
+            : 0;
+
+        // Award XP
+        const earnedXP = gamificationService.calculateXP(100, avgScore, lesson.level);
+        const { leveledUp, nextLevel } = gamificationService.updateProgress(earnedXP);
+
+        // Record completion
+        storageService.saveLessonCompletion(lesson.id, avgScore);
+
+        // Update daily goal
+        storageService.updateDailyGoal(lesson.estimatedMinutes);
+
+        // Navigate with state for celebration
+        navigate('/dashboard', { state: { leveledUp, nextLevel, earnedXP } });
     };
 
     const handleNextSentence = () => {
         if (!lesson) return;
 
-        // Save score
-        if (overallScore > 0) {
-            setSessionScore(prev => [...prev, overallScore]);
+        // Save current sentence score to the average
+        const currentScore = aiFeedback?.overallScore || overallScore;
+        if (currentScore > 0) {
+            setSessionScore(prev => [...prev, currentScore]);
         }
 
         if (currentSentenceIndex < lesson.sentences.length - 1) {
@@ -110,6 +162,7 @@ export const PracticePage = () => {
             setStep('listen');
             resetSpeech();
             setAiTip('');
+            setAiFeedback(null);
         } else {
             // Lesson complete
             handleCompleteLesson();
@@ -120,29 +173,7 @@ export const PracticePage = () => {
         setStep('speak');
         resetSpeech();
         setAiTip('');
-    };
-
-    const handleCompleteLesson = () => {
-        if (!lesson) return;
-
-        // Calculate average score
-        const avgScore = sessionScore.length > 0
-            ? Math.round(sessionScore.reduce((a, b) => a + b, 0) / sessionScore.length)
-            : 0;
-
-        // Save progress
-        storageService.addCompletedLesson(lesson.id);
-        storageService.updateProgress({
-            exercisesCompleted: storageService.getProgress()!.exercisesCompleted + lesson.sentences.length,
-            pronunciationAccuracy: avgScore,
-        });
-
-        // Update daily goal (estimate time)
-        const minutesSpent = Math.ceil(lesson.estimatedMinutes);
-        storageService.updateDailyGoal(minutesSpent);
-
-        // Navigate to completion screen (for now, back to lessons)
-        navigate('/lessons');
+        setAiFeedback(null);
     };
 
     const getStatusColor = (status: string) => {
@@ -305,8 +336,8 @@ export const PracticePage = () => {
                                 <motion.button
                                     onClick={isListening ? handleStopRecording : handleStartRecording}
                                     className={`w-24 h-24 md:w-32 md:h-32 mx-auto rounded-full flex items-center justify-center transition-all duration-300 ${isListening
-                                            ? 'bg-destructive shadow-lg scale-110'
-                                            : 'bg-primary hover:bg-primary/90 hover:scale-105'
+                                        ? 'bg-destructive shadow-lg scale-110'
+                                        : 'bg-primary hover:bg-primary/90 hover:scale-105'
                                         }`}
                                     whileTap={{ scale: 0.95 }}
                                     disabled={!isSupported}
@@ -356,21 +387,26 @@ export const PracticePage = () => {
                                         initial={{ scale: 0 }}
                                         animate={{ scale: 1 }}
                                         transition={{ type: 'spring', stiffness: 200, delay: 0.2 }}
-                                        className={`inline-flex items-center justify-center w-24 h-24 rounded-full mb-4 ${overallScore >= 80
-                                                ? 'bg-gradient-to-br from-status-perfect to-status-good'
-                                                : overallScore >= 60
-                                                    ? 'bg-gradient-to-br from-status-good to-accent'
-                                                    : 'bg-gradient-to-br from-status-needsWork to-status-error'
+                                        className={`inline-flex items-center justify-center w-24 h-24 rounded-full mb-4 ${(aiFeedback?.overallScore || overallScore) >= 80
+                                            ? 'bg-gradient-to-br from-status-perfect to-status-good'
+                                            : (aiFeedback?.overallScore || overallScore) >= 60
+                                                ? 'bg-gradient-to-br from-status-good to-accent'
+                                                : 'bg-gradient-to-br from-status-needsWork to-status-error'
                                             } text-white`}
                                     >
-                                        <span className="text-3xl font-display font-bold">{overallScore}%</span>
+                                        <span className="text-3xl font-display font-bold">{aiFeedback?.overallScore || overallScore}%</span>
                                     </motion.div>
                                     <p className="text-lg font-semibold">
-                                        {overallScore >= 90 ? 'Excellent!' :
-                                            overallScore >= 80 ? 'Great job!' :
-                                                overallScore >= 70 ? 'Good effort!' :
+                                        {(aiFeedback?.overallScore || overallScore) >= 90 ? 'Excellent!' :
+                                            (aiFeedback?.overallScore || overallScore) >= 80 ? 'Great job!' :
+                                                (aiFeedback?.overallScore || overallScore) >= 70 ? 'Good effort!' :
                                                     'Keep practicing!'}
                                     </p>
+                                    {aiFeedback?.overallFeedback && (
+                                        <p className="text-sm text-muted-foreground mt-2 px-4 italic">
+                                            "{aiFeedback.overallFeedback}"
+                                        </p>
+                                    )}
                                 </div>
 
                                 {/* What you said */}
@@ -380,9 +416,9 @@ export const PracticePage = () => {
                                 </div>
 
                                 {/* Word Breakdown */}
-                                {wordAnalysis.length > 0 && (
+                                {(aiFeedback?.wordBreakdown || wordAnalysis).length > 0 && (
                                     <div className="flex flex-wrap gap-2 justify-center mb-6">
-                                        {wordAnalysis.map((item, index) => (
+                                        {(aiFeedback?.wordBreakdown || wordAnalysis).map((item, index) => (
                                             <motion.div
                                                 key={index}
                                                 initial={{ opacity: 0, y: 10 }}
@@ -396,7 +432,7 @@ export const PracticePage = () => {
                                                 </div>
                                                 {/* Tooltip */}
                                                 <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 rounded-lg bg-foreground text-background text-xs whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-                                                    {item.feedback}
+                                                    {item.phoneticHelp ? `[${item.phoneticHelp}] ` : ''}{item.feedback || 'Good'}
                                                 </div>
                                             </motion.div>
                                         ))}

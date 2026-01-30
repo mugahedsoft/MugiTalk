@@ -28,6 +28,7 @@ export interface UserProgress {
   lessonsCompleted: number;
   exercisesCompleted: number;
   pronunciationAccuracy: number; // Average percentage
+  level: UserLevel;
   lastPracticeDate?: Date;
   weeklyGoal: number; // Minutes per week
   weeklyProgress: number; // Minutes completed this week
@@ -133,18 +134,20 @@ export interface SpeechRecognitionResult {
 
 export interface WordRecognition {
   word: string;
-  expectedWord: string;
-  isCorrect: boolean;
+  expectedWord?: string;
+  isCorrect?: boolean;
   accuracy: number; // 0-100
   feedback?: string;
-  status: 'perfect' | 'good' | 'needs-work' | 'error';
+  phoneticHelp?: string;
+  status: 'perfect' | 'good' | 'needs-work' | 'incorrect';
 }
 
 export interface PronunciationFeedback {
   overallScore: number;
+  overallFeedback?: string;
   wordBreakdown: WordRecognition[];
-  strengths: string[];
-  improvements: string[];
+  strengths?: string[];
+  improvements?: string[];
   aiTip?: string;
 }
 

@@ -32,9 +32,9 @@ The learner's level is ${level}.
 The scenario is: ${scenario}.
 
 Instructions:
-1. Keep your responses concise (1-3 sentences).
+1. Keep your responses concise(1 - 3 sentences).
 2. Correct major grammar mistakes gently if they impede understanding.
-3. Ask relevant follow-up questions to keep the conversation going.
+3. Ask relevant follow - up questions to keep the conversation going.
 4. Speak naturally for the role.
 5. Do not break character.
 `;
@@ -75,11 +75,14 @@ Instructions:
             });
 
             if (!response.ok) {
-                throw new Error(`API Error: ${response.statusText}`);
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error || `API Error: ${response.statusText}`);
             }
 
             const data = await response.json();
             const text = data.response;
+
+            if (!text) throw new Error('AI returned an empty response');
 
             this.chatHistory.push({ role: 'model', parts: text });
             return text;
